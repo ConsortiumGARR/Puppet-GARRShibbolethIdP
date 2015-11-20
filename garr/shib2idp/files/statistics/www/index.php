@@ -80,8 +80,8 @@
             $months = array('', 'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre');
             $curMonthNum = intval(date('m'));
 
-      	   $monthQuery = $_GET['mese'];
-         	if ($monthQuery == "") $monthQuery = $curMonthNum - 1;
+      	   $monthQuery =  filter_input(INPUT_GET, 'mese', FILTER_VALIDATE_INT, array("options" => array("default" => date('m', strtotime('-1 month')), "min_range" => 1, "max_value" => 12)));
+           if ($monthQuery == "") $monthQuery = $curMonthNum - 1;
 
             echo "<select id='month' name='month' onchange=\"changeMonth(this.value)\">";
             for ($i = 1; $i < $curMonthNum; $i++) {
