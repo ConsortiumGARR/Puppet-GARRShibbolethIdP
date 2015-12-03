@@ -5,10 +5,10 @@ HTPASSWD=$1
 USERNAME=$2
 PASSWORD=$3
 
-ENTRY=`cat $HTPASSWD | grep "^$USERNAME:"`
-HASH=`echo $ENTRY | cut -f 2 -d :`
-SALT=`echo $HASH | cut -f 3 -d $`
-RESULT=`openssl passwd -apr1 -salt $SALT $PASSWORD`
+ENTRY=`cat "$HTPASSWD" | grep "^$USERNAME:"`
+HASH=`echo "$ENTRY" | cut -f 2 -d :`
+SALT=`echo "$HASH" | cut -f 3 -d $`
+RESULT=`openssl passwd -apr1 -salt "$SALT" "$PASSWORD"`
 
 echo "File: $HTPASSWD"
 echo "Username: $USERNAME"
