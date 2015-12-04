@@ -193,6 +193,7 @@ define shib2idp::instance (
 
     download_file{ '/opt/shibboleth-idp/metadata/edugain2idem-metadata-sha256.xml':
       url   => "http://www.garr.it/idem-metadata/edugain2idem-metadata-sha256.xml",
+      require => Shibboleth_install['execute_install'],
     }
 
     file { 'metadata-federation.xml':
