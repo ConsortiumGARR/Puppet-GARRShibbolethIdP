@@ -107,13 +107,6 @@
        <SuffixPattern> - %level - [%logger:%line] %msg</SuffixPattern>
     </appender>
 
-    <appender name="SYSLOG_ACCESS" class="ch.qos.logback.classic.net.SyslogAppender">
-       <SyslogHost><%= @logserver %></SyslogHost>
-       <Port>514</Port>
-       <Facility>LOCAL5</Facility>
-       <SuffixPattern> - %level - [%logger:%line] %msg</SuffixPattern>
-    </appender>
-
     <appender name="SYSLOG_PROCESS" class="ch.qos.logback.classic.net.SyslogAppender">
        <SyslogHost><%= @logserver %></SyslogHost>
        <Port>514</Port>
@@ -121,15 +114,21 @@
        <SuffixPattern> - %level - [%logger:%line] %msg</SuffixPattern>
     </appender>
 
+    <appender name="SYSLOG_CONSENT" class="ch.qos.logback.classic.net.SyslogAppender">
+       <SyslogHost><%= @logserver %></SyslogHost>
+       <Port>514</Port>
+       <Facility>LOCAL1</Facility>
+       <SuffixPattern> - %level - [%logger:%line] %msg</SuffixPattern>
+    </appender>
 
     <logger name="Shibboleth-Audit" level="ALL">
         <appender-ref ref="IDP_AUDIT"/>
-        <appender-ref ref="SYSLOG_ACCESS"/>
+        <appender-ref ref="SYSLOG_AUDIT"/>
     </logger>
 
     <logger name="Shibboleth-Consent-Audit" level="ALL">
         <appender-ref ref="IDP_CONSENT_AUDIT"/>
-        <appender-ref ref="SYSLOG_AUDIT"/>
+        <appender-ref ref="SYSLOG_CONSENT"/>
     </logger>
 
     <root level="INFO">

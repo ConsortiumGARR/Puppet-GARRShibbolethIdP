@@ -32,7 +32,6 @@ class shib2idp::management::collectd (
     ['libregexp-common-perl', 'libconfig-general-perl', 'libhtml-parser-perl', 'librrds-perl', 'mbmon']:
       ensure => present;
   }
-
   if ($collectdserver) {
     file { '/etc/collectd/collectd.conf':
       ensure  => present,
@@ -47,10 +46,26 @@ class shib2idp::management::collectd (
     service { 'collectd':
       enable  => true,
       ensure  => 'running',
-      require => Package['collectd'],
+      require => [File['/etc/collectd/collectd.conf'], Package['collectd']],
     }
   } else {
-    file {
+       file { '/etc/collectd/collectd.conf':
+         ensure  => present,
+         owner   => 'root',
+         group   => 'root',
+         mode    => '0644',
+         source  => "puppet:///modules/shib2idp/monitoring/collectd-orig.conf",
+	 require => Package['collectd'],
+         notify  => Service['collectd'],
+       }
+ 
+       service { 'collectd':
+         enable  => true,
+         ensure  => 'running',
+         require => [File['/etc/collectd/collectd.conf'], Package['collectd']],
+       }
+
+     file {
       "/etc/apache2/sites-available/collectd":
         ensure  => present,
         owner   => 'root',
@@ -76,6 +91,6 @@ class shib2idp::management::collectd (
         mode    => '0644',
         require => File["/etc/apache2/sites-available/collectd"],
         notify  => Service['apache2'],
-    }
+     }
   }
 }

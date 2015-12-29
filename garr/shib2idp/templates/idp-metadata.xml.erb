@@ -98,7 +98,7 @@ $IDP_CERTIFICATE_ENCRYPT
     </IDPSSODescriptor>
 
 
-    <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol">
+    <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0">
 
         <Extensions>
             <shibmd:Scope regexp="false"><%= @domain_name %></shibmd:Scope>
@@ -136,7 +136,7 @@ $IDP_CERTIFICATE_ENCRYPT
         </KeyDescriptor>
 
         <AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://<%=@idpfqdn%>:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
-        <!-- <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://<%=@idpfqdn%>:8443/idp/profile/SAML2/SOAP/AttributeQuery"/> -->
+        <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://<%=@idpfqdn%>:8443/idp/profile/SAML2/SOAP/AttributeQuery"/>
         <!-- If you uncomment the above you should add urn:oasis:names:tc:SAML:2.0:protocol to the protocolSupportEnumeration above -->
 
     </AttributeAuthorityDescriptor>

@@ -20,21 +20,21 @@ class shib2idp::management::rsyslog (
   
   if ($logserver) {
 	  # Remote logging with rsyslog
-	  file { '/etc/rsyslog.d/99-tomcat.conf':
-	    ensure  => present,
-	    owner   => 'root',
-	    group   => 'root',
-	    mode    => '0644',
-	    content => template("shib2idp/99-tomcat.erb"),
-	    notify => Exec['rsyslog'],
-	  }
+	  #file { '/etc/rsyslog.d/99-tomcat.conf':
+	  #  ensure  => present,
+	  #  owner   => 'root',
+	  #  group   => 'root',
+	  #  mode    => '0644',
+	  #  content => template("shib2idp/99-tomcat.erb"),
+	  #  notify => Exec['rsyslog'],
+	  #}
 	
-    exec { 'rsyslog':
-      command     => "/usr/sbin/service rsyslog restart",
-      #path       => ["/usr/sbin"],
-      require     => File['/etc/rsyslog.d/99-tomcat.conf'],
-      refreshonly => true,
-    }
+    #exec { 'rsyslog':
+    #  command     => "/usr/sbin/service rsyslog restart",
+    #  #path       => ["/usr/sbin"],
+    #  require     => File['/etc/rsyslog.d/99-tomcat.conf'],
+    #  refreshonly => true,
+    #}
 	
 	  file { '/opt/shibboleth-idp/conf/logback.xml':
 	    ensure  => present,
@@ -42,21 +42,22 @@ class shib2idp::management::rsyslog (
       group   => $curtomcat,
       mode    => '0664',
 	    content  => template ("shib2idp/logback.xml.erb"),
-	    require => [Shibboleth_install['execute_install'], File['/etc/rsyslog.d/99-tomcat.conf']];
+	    require => Shibboleth_install['execute_install'];
+	    #require => [Shibboleth_install['execute_install'], File['/etc/rsyslog.d/99-tomcat.conf']];
 	  }
-  } else {
-    file { 
-      '/etc/rsyslog.d/99-tomcat.conf':
-        ensure => absent;
+  } #else {
+    #file { 
+      #'/etc/rsyslog.d/99-tomcat.conf':
+      #  ensure => absent;
 
-      '/opt/shibboleth-idp/logs/shib-idp-process.log':
-        ensure => absent;
+    #  '/opt/shibboleth-idp/logs/shib-idp-process.log':
+    #    ensure => absent;
 
-      '/opt/shibboleth-idp/logs/shib-idp-access.log':
-        ensure => absent;
+    #  '/opt/shibboleth-idp/logs/shib-idp-access.log':
+    #    ensure => absent;
 
-      '/opt/shibboleth-idp/logs/shib-idp-audit.log':
-        ensure => absent;
-    }
-  }
+    #  '/opt/shibboleth-idp/logs/shib-idp-audit.log':
+    #    ensure => absent;
+    #}
+  #}
 }
