@@ -166,7 +166,7 @@ class shib2idp::management::statistics (
                      'php readMetadata.php',
                      'php insertSP.php',
                      '',
-                     'python dbanalysis.py /opt/shibboleth-idp/logs/idp-audit*.log',
+                     'python dbanalysis.py /opt/shibboleth-idp/logs/idp-audit*',
                      '#python dbanalysis.py /var/log/shib-idp-audit*.log',], "\n"),
     require => [Process_file['readMetadata.php', 'insertSP.php', 'dbanalysis.py'], Package['python-mysqldb', 'php5-mysql']],
   }

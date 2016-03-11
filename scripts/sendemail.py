@@ -14,7 +14,7 @@ hostname = sys.argv[1]
 path = '/tmp/'
 filename = '%s-csr-request.csr' % hostname
 senderName = 'IdP in the cloud service <idpcloud-service@garr.it>'
-receiverName = 'GARR Certificate Authority <system.support@garr.it>'
+receiverName = 'GARR Certificate Authority <csd-support@garr.it>'
 
 sender = re.search('.*<(.*)>', senderName).group(1)
 receiver = re.search('.*<(.*)>', receiverName).group(1)
@@ -30,7 +30,7 @@ emailMsg = email.MIMEMultipart.MIMEMultipart('alternative')
 emailMsg['Subject'] = 'Certificate request for IdP in the cloud'
 emailMsg['From'] = senderName
 emailMsg['To'] = receiverName
-#emailMsg['Cc'] =
+emailMsg['Cc'] = 'System Support <system.support@garr.it>'
 emailMsg.attach(email.mime.text.MIMEText(html, 'html'))
 
 fileMsg = email.mime.base.MIMEBase('text', 'plain; charset=UTF-8; name="%s"' % filename)
@@ -40,7 +40,8 @@ fileMsg.add_header('Content-Disposition', 'attachment; filename="%s"' % filename
 emailMsg.attach(fileMsg)
 
 try:
-  smtpObj = smtplib.SMTP('mail.openstacklocal')
+#  smtpObj = smtplib.SMTP('mail.openstacklocal')
+  smtpObj = smtplib.SMTP('localhost')
   smtpObj.sendmail(sender, receiver, emailMsg.as_string())
   smtpObj.quit()
   print "Successfully sent email"
