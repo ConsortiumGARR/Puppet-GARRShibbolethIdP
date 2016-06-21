@@ -41,6 +41,8 @@ class shib2idp::idp::finalize (
   $idpfqdn      = 'idp.example.org',
   $test_federation = true,
   $restore      = false,
+  $ec_rs        = true,
+  $ec_coco      = true,
 ) {
 
   $test_federation_var = $test_federation

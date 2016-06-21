@@ -104,7 +104,9 @@ class shib2idp::management::statistics (
          path    => "${stats_installdir}/idem-test-metadata-sha256.xml",
          ensure  => link,
          target  => "/opt/shibboleth-idp/metadata/idem-test-metadata-sha256.xml",
-         require => File[$stats_installdir];
+         require => File[$stats_installdir]
+      
+      ;
 
       'config.php':
          path    => "${stats_installdir}/config.php",
@@ -113,15 +115,27 @@ class shib2idp::management::statistics (
          group  => 'root',
          mode   => '0644',
          source => "puppet:///modules/shib2idp/statistics/config-idem-test.php",
-         require => File[$stats_installdir];
+         require => File[$stats_installdir]
     }
    
   } else {
-    file { 'edugain2idem-metadata-sha256.xml':
-      path    => "${stats_installdir}/edugain2idem-metadata-sha256.xml",
-      ensure  => link,
-      target  => "/opt/shibboleth-idp/metadata/edugain2idem-metadata-sha256.xml",
-      require => File[$stats_installdir],
+    file { 
+      'edugain2idem-metadata-sha256.xml':
+         path    => "${stats_installdir}/edugain2idem-metadata-sha256.xml",
+         ensure  => link,
+         target  => "/opt/shibboleth-idp/metadata/edugain2idem-metadata-sha256.xml",
+         require => File[$stats_installdir]
+
+      ;
+ 
+      'config.php':
+         path    => "${stats_installdir}/config.php",
+         ensure  => present,
+         owner  => 'root',
+         group  => 'root',
+         mode   => '0644',
+         source => "puppet:///modules/shib2idp/statistics/config.php",
+         require => File[$stats_installdir];
     }
   }
 
@@ -141,7 +155,7 @@ class shib2idp::management::statistics (
       content => template("shib2idp/statistics/insertSP.erb"),
       require => File[$stats_installdir];
 
-    ['config.php','functions.php','IDProvider.metadata.php','loganalysis.py','questionario.py','readMetadata.php','SProvider.conf.php','SProvider.metadata.php']:
+    ['functions.php','IDProvider.metadata.php','loganalysis.py','questionario.py','readMetadata.php','SProvider.conf.php','SProvider.metadata.php']:
       dirpath => $stats_installdir,
       srcpath => "statistics",
       require => File[$stats_installdir];

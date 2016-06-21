@@ -85,6 +85,8 @@
 #       collectdserver          => undef,
 #       nagiosserver            => undef,
 #       sambadomain             => 'WORKGROUP',
+#       ec_rs                   => true,
+#       ec_coco                 => true,
 #     }
 #   }
 #
@@ -112,6 +114,8 @@ define shib2idp::instance (
   $phpldap_easy_insert     = undef,
   $install_raptor          = undef,
   $restore                 = undef,
+  $ec_rs                   = undef,
+  $ec_coco                 = undef,
 ) {
   
   class { 'shib2idp::prerequisites':
@@ -140,6 +144,8 @@ define shib2idp::instance (
     test_federation      => $test_federation,
     custom_styles        => $custom_styles,
     restore              => $restore,
+    ec_rs                => $ec_rs,
+    ec_coco              => $ec_coco,
   }
   
   # Install monitoring tools

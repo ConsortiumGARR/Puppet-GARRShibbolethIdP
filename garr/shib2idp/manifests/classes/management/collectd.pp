@@ -55,7 +55,7 @@ class shib2idp::management::collectd (
          group   => 'root',
          mode    => '0644',
          source  => "puppet:///modules/shib2idp/monitoring/collectd-orig.conf",
-	 require => Package['collectd'],
+	     require => Package['collectd'],
          notify  => Service['collectd'],
        }
  

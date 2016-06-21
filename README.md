@@ -6,7 +6,7 @@ The module has been developed and tested on Debian (Squeeze and Wheezy) and on U
 
 Configuration of the Puppet Master
 ==================================
-The modules developed can be installed on a Puppet Agent running Puppet >= 3.3.0.
+The modules developed can be installed on a Puppet Agent running Puppet <= 3.8.7
 
 The steps to have a Puppet Master installed correctly are:
 
@@ -61,6 +61,7 @@ The steps to have a Puppet Master installed correctly are:
   for i in /opt/Puppet-GARRShibbolethIdP/puppetlabs/*; do ln -s $i; done
   for i in /opt/Puppet-GARRShibbolethIdP/garr-common/garr/*; do ln -s $i; done
   for i in /opt/Puppet-GARRShibbolethIdP/garr/*; do ln -s $i; done
+  for i in /opt/Puppet-GARRShibbolethIdP/garr-common/puppetlabs/*; do ln -s $i; done
   ```
 
 * Create a new empty file called `/etc/puppet/manifests/site.pp` and a new directory called `/etc/puppet/manifests/nodes`.
@@ -267,6 +268,8 @@ node '<YOUR_IDP_FQDN>' {
     custom_styles                => true,
     phpldap_easy_insert          => true,
     uapprove_version             => '2.5.0',
+    ec_rs                        => true,
+    ec_coco                      => true,
   }
 }
 ```
@@ -358,6 +361,8 @@ The parameters that can be specified to describe a Shibboleth IdP instance are t
    the complete one or the simplified version (true in this case implies that the simplified user management form will be installed).
  * `uapprove_version`: This parameter permits to choose which version of uApprove must be installed. The default version installed
    will be the '2.5.0'. The version tested are '2.4.1' and '2.5.0'.
+ * `ec_rs`: This parameter permits to choose if the IdP will support the Research and Scholarchip Entity Category
+ * `ec_coco`: This parameter permits to choose if the IdP will support the Code Of Conduct Entity Category
 
 check_password.so compilation
 =============================

@@ -60,6 +60,8 @@ class shib2idp::idp (
   $test_federation   = undef,
   $custom_styles     = undef,
   $restore           = undef,
+  $ec_rs             = true,
+  $ec_coco           = true,
 ) {
   $curtomcat = $::tomcat::curtomcat
 
@@ -170,6 +172,11 @@ class shib2idp::idp (
   Download_file <| title == "/usr/local/src/shibboleth-identity-provider-${shibbolethversion}" |> -> Class['shib2idp::idp::styles']
   Class['shib2idp::idp::styles'] ~> Shibboleth_install <| title == 'execute_install' |>
 
+  file {
+    '/opt/shibboleth-idp/edit-webapp/images/':
+        ensure => directory
+  }
+
   class { 'shib2idp::idp::styles':
     install_ldap_var => $install_ldap,
     custom_styles => $custom_styles,
@@ -278,6 +285,8 @@ class shib2idp::idp (
     nagiosserver         => $nagiosserver,
     test_federation      => $test_federation,
     restore              => $restore,
+    ec_rs                => $ec_rs,
+    ec_coco              => $ec_coco,
   }
 
 }
