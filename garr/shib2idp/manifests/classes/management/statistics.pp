@@ -99,12 +99,23 @@ class shib2idp::management::statistics (
   }
   
   if ($test_federation) {
-    file { 'idem-test-metadata-sha256.xml':
-      path    => "${stats_installdir}/idem-test-metadata-sha256.xml",
-      ensure  => link,
-      target  => "/opt/shibboleth-idp/metadata/idem-test-metadata-sha256.xml",
-      require => File[$stats_installdir],
+    file { 
+      'idem-test-metadata-sha256.xml':
+         path    => "${stats_installdir}/idem-test-metadata-sha256.xml",
+         ensure  => link,
+         target  => "/opt/shibboleth-idp/metadata/idem-test-metadata-sha256.xml",
+         require => File[$stats_installdir];
+
+      'config.php':
+         path    => "${stats_installdir}/config.php",
+         ensure  => present,
+         owner  => 'root',
+         group  => 'root',
+         mode   => '0644',
+         source => "puppet:///modules/shib2idp/statistics/config-idem-test.php",
+         require => File[$stats_installdir];
     }
+   
   } else {
     file { 'edugain2idem-metadata-sha256.xml':
       path    => "${stats_installdir}/edugain2idem-metadata-sha256.xml",

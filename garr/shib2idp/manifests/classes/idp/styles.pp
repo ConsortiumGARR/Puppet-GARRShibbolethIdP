@@ -64,7 +64,7 @@ class shib2idp::idp::styles(
         source  => "puppet:///modules/shib2idp/styles/template/itaFlag.png",
         require => File['/usr/local/src/shibboleth-identity-provider'];       
 
-       '/usr/local/src/shibboleth-identity-provider/webapp/images/enFlag.png':
+      '/usr/local/src/shibboleth-identity-provider/webapp/images/enFlag.png':
         ensure  => present,
         owner   => 'root',
         group   => 'root',
@@ -96,7 +96,7 @@ class shib2idp::idp::styles(
         source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-32x32_en.png",
         require => File['/usr/local/src/shibboleth-identity-provider'];
        
-       '/usr/local/src/shibboleth-identity-provider/webapp/images/institutionLogo-160x120_en.png':
+      '/usr/local/src/shibboleth-identity-provider/webapp/images/institutionLogo-160x120_en.png':
         ensure  => present,
         owner   => 'root',
         group   => 'root',
@@ -104,6 +104,42 @@ class shib2idp::idp::styles(
         source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-160x120_en.png",
         require => File['/usr/local/src/shibboleth-identity-provider'];
 
+      # INIZIO AGGIUNTA # 
+   
+      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-32x32_it.png':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0664',
+        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-32x32_it.png",
+        require => File['/opt/shibboleth-idp/edit-webapp/images'];
+       
+      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-160x120_it.png':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0664',
+        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-160x120_it.png",
+        require => File['/opt/shibboleth-idp/edit-webapp/images'];
+
+      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-32x32_en.png':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0664',
+        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-32x32_en.png",
+        require => File['/opt/shibboleth-idp/edit-webapp/images'];
+       
+      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-160x120_en.png':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0664',
+        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-160x120_en.png",
+        require => File['/opt/shibboleth-idp/edit-webapp/images'];
+
+       # FINE AGGIUNTA #
+   
        '/usr/local/src/shibboleth-identity-provider/webapp/images/error.png':
         ensure  => present,
         owner   => 'root',
@@ -112,7 +148,7 @@ class shib2idp::idp::styles(
         source  => "puppet:///modules/shib2idp/styles/template/error.png",
         require => File['/usr/local/src/shibboleth-identity-provider'];
        
-      '/usr/local/src/shibboleth-identity-provider/webapp/error-404.jsp':
+       '/usr/local/src/shibboleth-identity-provider/webapp/error-404.jsp':
         ensure  => present,
         owner   => 'root',
         group   => 'root',
@@ -152,7 +188,7 @@ class shib2idp::idp::styles(
         source  => "puppet:///modules/shib2idp/styles/${hostname}-login.css",
         require => File['/usr/local/src/shibboleth-identity-provider'];
 
-      "/usr/local/src/shibboleth-identity-provider/messages/authn-messages.properties":
+      '/usr/local/src/shibboleth-identity-provider/messages/authn-messages.properties':
         ensure  => present,
         owner   => 'root',
         group   => 'root',
@@ -160,7 +196,7 @@ class shib2idp::idp::styles(
         content => template("shib2idp/styles/authn-messages.properties.erb"),
         require => File['/usr/local/src/shibboleth-identity-provider'];
       
-      "/usr/local/src/shibboleth-identity-provider/messages/consent-messages.properties":
+      '/usr/local/src/shibboleth-identity-provider/messages/consent-messages.properties':
         ensure  => present,
         owner   => 'root',
         group   => 'root',
@@ -168,7 +204,7 @@ class shib2idp::idp::styles(
         content => template("shib2idp/styles/consent-messages.properties.erb"),
         require => File['/usr/local/src/shibboleth-identity-provider'];
       
-      "/usr/local/src/shibboleth-identity-provider/messages/error-messages.properties":
+      '/usr/local/src/shibboleth-identity-provider/messages/error-messages.properties':
         ensure  => present,
         owner   => 'root',
         group   => 'root',

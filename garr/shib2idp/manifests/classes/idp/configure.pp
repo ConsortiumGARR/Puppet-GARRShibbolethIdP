@@ -35,6 +35,12 @@ class shib2idp::idp::configure (
       ensure => present,
       path   => '/etc/environment',
       line   => "IDP_HOME=${idp_home}";
+
+    'idp_environment_rule_3':
+      ensure => present,
+      path   => '/etc/environment',
+      line   => "OPENSSL_ia32cap=~0x200000200000000";
+ 
   }
 
   file { "/etc/${curtomcat}/Catalina/localhost/idp.xml":

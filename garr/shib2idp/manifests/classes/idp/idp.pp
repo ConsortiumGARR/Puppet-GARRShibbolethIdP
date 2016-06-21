@@ -186,7 +186,15 @@ class shib2idp::idp (
       '/opt/shibboleth-idp/credentials':
         ensure  => directory,
         require => File['/opt/shibboleth-idp'];
-    
+
+      '/opt/shibboleth-idp/edit-webapp':
+        ensure  => directory,
+        require => File['/opt/shibboleth-idp'];
+
+      '/opt/shibboleth-idp/edit-webapp/images':
+        ensure  => directory,
+        require => File['/opt/shibboleth-idp/edit-webapp'];
+
       ['/opt/shibboleth-idp/credentials/idp-encryption.crt', '/opt/shibboleth-idp/credentials/idp-signing.crt', '/opt/shibboleth-idp/credentials/idp-backchannel.crt']:
         ensure  => present,
         owner   => $curtomcat,
