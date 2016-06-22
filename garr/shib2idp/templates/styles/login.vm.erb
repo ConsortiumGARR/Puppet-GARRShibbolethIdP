@@ -134,7 +134,7 @@
           #end
           <br/><br/><a href="javascript:setParam('spinfo', 'false');"><span class="item-marker">&lsaquo;</span> #springMessageText("idp.login.goback", "Go back to login page")</a>
         #else
-          <a href="#springMessageText("metadata.infoUrl", "#")"><img src="#springMessage("idp.logo")" alt="#springMessageText("idp.logo.alt-text", "logo")"></a>
+          <a href="#springMessageText("metadata.infoUrl", "#")"><img src="$request.getContextPath()#springMessage("idp.logo")" alt="#springMessageText("idp.logo.alt-text", "logo")"></a>
         #end
         </header>
 
