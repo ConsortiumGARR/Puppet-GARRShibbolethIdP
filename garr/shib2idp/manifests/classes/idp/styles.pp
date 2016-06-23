@@ -104,42 +104,6 @@ class shib2idp::idp::styles(
         source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-160x120_en.png",
         require => File['/usr/local/src/shibboleth-identity-provider'];
 
-      # INIZIO AGGIUNTA # 
-   
-      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-32x32_it.png':
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0664',
-        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-32x32_it.png",
-        require => File['/opt/shibboleth-idp/edit-webapp/images'];
-       
-      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-160x120_it.png':
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0664',
-        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-160x120_it.png",
-        require => File['/opt/shibboleth-idp/edit-webapp/images'];
-
-      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-32x32_en.png':
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0664',
-        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-32x32_en.png",
-        require => File['/opt/shibboleth-idp/edit-webapp/images'];
-       
-      '/opt/shibboleth-idp/edit-webapp/images/institutionLogo-160x120_en.png':
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0664',
-        source  => "puppet:///modules/shib2idp/styles/${hostname}-logo-160x120_en.png",
-        require => File['/opt/shibboleth-idp/edit-webapp/images'];
-
-       # FINE AGGIUNTA #
-   
        '/usr/local/src/shibboleth-identity-provider/webapp/images/error.png':
         ensure  => present,
         owner   => 'root',

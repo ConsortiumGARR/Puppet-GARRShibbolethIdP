@@ -250,8 +250,10 @@ module Puppet
      
                 # Insert the new certificate into the right position on idp-metadata.xml file.
                 xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_SIGN/, sourceCertSign.join)
-                xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_ENCRYPT/, sourceCertEncrypt.join("\n"))
-                xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_BACK/, sourceCertBackchannel.join("\n"))
+                xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_ENCRYPT/, sourceCertEncrypt.join)
+                #xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_ENCRYPT/, sourceCertEncrypt.join("\n"))
+                xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_BACK/, sourceCertBackchannel.join)
+                #xmldoc = xmldoc.gsub(/\$IDP_CERTIFICATE_BACK/, sourceCertBackchannel.join("\n"))
                 
                 # Here the 'xmldoc' contains the correct XML content. 
           

@@ -172,11 +172,6 @@ class shib2idp::idp (
   Download_file <| title == "/usr/local/src/shibboleth-identity-provider-${shibbolethversion}" |> -> Class['shib2idp::idp::styles']
   Class['shib2idp::idp::styles'] ~> Shibboleth_install <| title == 'execute_install' |>
 
-  file {
-    '/opt/shibboleth-idp/edit-webapp/images/':
-        ensure => directory
-  }
-
   class { 'shib2idp::idp::styles':
     install_ldap_var => $install_ldap,
     custom_styles => $custom_styles,
@@ -193,14 +188,6 @@ class shib2idp::idp (
       '/opt/shibboleth-idp/credentials':
         ensure  => directory,
         require => File['/opt/shibboleth-idp'];
-
-      '/opt/shibboleth-idp/edit-webapp':
-        ensure  => directory,
-        require => File['/opt/shibboleth-idp'];
-
-      '/opt/shibboleth-idp/edit-webapp/images':
-        ensure  => directory,
-        require => File['/opt/shibboleth-idp/edit-webapp'];
 
       ['/opt/shibboleth-idp/credentials/idp-encryption.crt', '/opt/shibboleth-idp/credentials/idp-signing.crt', '/opt/shibboleth-idp/credentials/idp-backchannel.crt']:
         ensure  => present,
