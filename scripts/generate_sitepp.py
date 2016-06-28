@@ -155,7 +155,7 @@ if sitepp_vals['configure_admin'] == 'true':
 #sitepp_vals['shibbolethversion'] = "'%s'" % request("Specify the IdP version you would like to install", "2.4.0", example_as_default=True)
 sitepp_vals['shibbolethversion'] = "undef"
 
-sitepp_vals['install_uapprove'] = str(confirm("Install uApprove on the IdP?", allow_empty=True, default=True)).lower()
+#sitepp_vals['install_uapprove'] = str(confirm("Install uApprove on the IdP?", allow_empty=True, default=True)).lower()
 
 sitepp_vals['mailto'] = sitepp_vals['technicalEmail']
 
@@ -189,6 +189,9 @@ sitepp_vals['sambadomain'] = request("Specify the samba domain for the IdP serve
 sitepp_vals['test_federation'] = request("Use IDEM Test Federation or not?", "true", example_as_default=True)
 #sitepp_vals['custom_styles'] = request("Use the IdP in the Cloud custom files for IdP Login Page (true) or leave the originals (false)?", "true", example_as_default=True)
 sitepp_vals['custom_styles'] = "true"
+sitepp_vals['ec_coco'] = request("Specify if the IdP will support the EC Data Protection Code Of Conduct", "true", example_as_default=True)
+sitepp_vals['ec_rs'] = request("Specify if the IdP will support the EC Research and Scholarship", "true", example_as_default=True)
+sitepp_vals['restore'] = request("Specify if the IdP will be and IdP restored (remember to put the files in the right places)", "false", example_as_default=True)
 
 #sitepp_vals['enable_network'] = request("Insert the network netmask where SSH the other management services will be accessible", "10.0.0.0/24", allow_empty=True)
 

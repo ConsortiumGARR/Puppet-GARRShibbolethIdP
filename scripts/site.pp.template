@@ -42,7 +42,6 @@ node '{{ vals['idpfqdn'] }}' {
       'registrationInstant'        => '{{ vals['registrationInstant'] }}',
     },
     shibbolethversion            => {{ vals['shibbolethversion'] }},
-    install_uapprove             => {{ vals['install_uapprove'] }},
     idpfqdn                      => $hostfqdn,
     keystorepassword             => $keystorepassword,
     mailto                       => $mailto,
@@ -61,5 +60,8 @@ node '{{ vals['idpfqdn'] }}' {
     sambadomain                  => '{{ vals['sambadomain'] }}',
     test_federation              => {{ vals['test_federation'] }},
     custom_styles                => {{ vals['custom_styles'] }},
+    ec_coco                      => {{ vals['ec_coco']}},
+    ec_rs                        => {{ vals['ec_rs']}},
+    restore                      => {{ vals['restore']}},
   }
 }
