@@ -53,6 +53,10 @@ The steps to have a Puppet Master installed correctly are:
   cd Puppet-GARRShibbolethIdP
   git submodule init
   git submodule update
+
+  cd Puppet-GARRShibbolethIdP/garr-common
+  git submodule init
+  git submodule update
   ```
 
 * Move or Link all modules from the proper folders of this GitHub project to `/etc/puppet/modules`:
