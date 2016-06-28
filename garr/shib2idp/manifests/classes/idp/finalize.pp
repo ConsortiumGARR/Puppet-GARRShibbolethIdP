@@ -4,12 +4,12 @@
 # Shibboleth IdP on the Puppet agent machine.
 #
 # The finalize operations are used to finalize IdP configuration, to register all attribute
-# resolver and attribute filters. 
+# resolver and attribute filters.
 #
 # Parameters:
 # +install_ldap+:: This parameter permits to specify if an OpenLDAP server must be installed on the IdP machine or not.
 # +domain_name+:: This parameter permits to specify the domain name for the LDAP user database.
-# +basedn+:: This parameter must contain the base DN of the LDAP server. 
+# +basedn+:: This parameter must contain the base DN of the LDAP server.
 # +rootdn+:: This parameter must contain the CN for the user with root access to the LDAP server.
 # +rootpw+:: This parameter must contain the password of the user with root access.
 # +rootldappw+:: This parameter must contain the password of the user with root access to the LDAP server.
@@ -71,7 +71,7 @@ class shib2idp::idp::finalize (
       rootdn => $rootdn,
       rootpw => $rootldappw,
     }
-    
+
     ldap::define::acl { "dn.subtree=\"ou=people,${basedn}\" attrs=userPassword":
       domain     => $domain_name,
       access     => {
@@ -82,43 +82,17 @@ class shib2idp::idp::finalize (
       },
     }
 
+    ldap::define::schema {
+      'eduPerson':
+        ensure => 'present',
+        source => 'puppet:///modules/shib2idp/schema/eduperson-200412.schema';
+
+      'schac':
+        ensure => 'present',
+        source => 'puppet:///modules/shib2idp/schema/schac-20110705-1.4.1.schema';
+    }
+
     file {
-      "/etc/ldap/schema/eduperson-200412.schema":
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        source  => "puppet:///modules/shib2idp/schema/eduperson-200412.schema",
-        require => Package[$ldap::params::openldap_packages],
-        notify  => Service[$ldap::params::lp_openldap_service];
-
-      "/etc/ldap/schema/eduperson-200412.ldif":
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        source  => "puppet:///modules/shib2idp/schema/eduperson-200412.ldif",
-        require => Package[$ldap::params::openldap_packages],
-        notify  => Service[$ldap::params::lp_openldap_service];
-
-      "/etc/ldap/schema/schac-20110705-1.4.1.schema":
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        source  => "puppet:///modules/shib2idp/schema/schac-20110705-1.4.1.schema",
-        require => Package[$ldap::params::openldap_packages],
-        notify  => Service[$ldap::params::lp_openldap_service];
-
-      "/etc/ldap/schema/schac-20110705-1.4.1.ldif":
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        source  => "puppet:///modules/shib2idp/schema/schac-20110705-1.4.1.ldif",
-        require => Package[$ldap::params::openldap_packages],
-        notify  => Service[$ldap::params::lp_openldap_service];
-
       "/etc/ldap/schema/ppolicy.ldif":
         ensure  => present,
         owner   => 'root',
@@ -168,24 +142,8 @@ class shib2idp::idp::finalize (
       }
     }
 
-    file_line {
-      'eduperson-schema':
-        ensure  => present,
-        path    => '/etc/ldap/schema.conf',
-        line    => 'include /etc/ldap/schema/eduperson-200412.schema',
-        require => [Package[$ldap::params::openldap_packages], File['/etc/ldap/schema/eduperson-200412.schema']],
-        notify  => Service[$ldap::params::lp_openldap_service];
-
-      'schac-schema':
-        ensure  => present,
-        path    => '/etc/ldap/schema.conf',
-        line    => 'include /etc/ldap/schema/schac-20110705-1.4.1.schema',
-        require => [Package[$ldap::params::openldap_packages], File['/etc/ldap/schema/schac-20110705-1.4.1.schema']],
-        notify  => Service[$ldap::params::lp_openldap_service];
-    }
-
     if ($restore){
-      file { 
+      file {
          'retrieved-ldap-backup':
             path    => '/tmp/ldap.tar.gz',
             ensure  => present,
@@ -196,19 +154,19 @@ class shib2idp::idp::finalize (
             require => Class['ldap'],
       }
 
-      exec { 
+      exec {
          'slapd-stop':
             command => "service slapd stop",
             cwd     => "/tmp",
             path    => ["/bin", "/usr/bin"],
             require => File['retrieved-ldap-backup'];
-        
+
          'restore-ldap':
             command => "tar xzf ldap.tar.gz --directory /",
             cwd     => "/tmp",
             path    => ["/bin", "/usr/bin"],
             require => [Exec['slapd-stop'], File['retrieved-ldap-backup']];
-   
+
          'remove-ldap-backup':
             command => "rm -f /tmp/ldap.tar.gz",
             cwd     => "/tmp",
@@ -226,12 +184,12 @@ class shib2idp::idp::finalize (
       if $rubyversion == "1.8.7" {
          execute_ldap {
             'ldapadd-ppolicies-ou':
-	            rootdn      => "${rootdn},${basedn}",
-	            rootpw      => $rootldappw,
-	            ldif_search => "ou=policies,${basedn}",
-	            ldif        => template("shib2idp/ppolicy_ou.ldif.erb"),
-	            require     => [Service[$ldap::params::lp_openldap_service], Package['libldap-ruby1.8']];
-      
+                    rootdn      => "${rootdn},${basedn}",
+                    rootpw      => $rootldappw,
+                    ldif_search => "ou=policies,${basedn}",
+                    ldif        => template("shib2idp/ppolicy_ou.ldif.erb"),
+                    require     => [Service[$ldap::params::lp_openldap_service], Package['libldap-ruby1.8']];
+
             'ldapadd-ppolicies-entity':
                rootdn      => "${rootdn},${basedn}",
                rootpw      => $rootldappw,
@@ -250,14 +208,14 @@ class shib2idp::idp::finalize (
                ldif_search => "ou=policies,${basedn}",
                ldif        => template("shib2idp/ppolicy_ou.ldif.erb"),
                require     => [Service[$ldap::params::lp_openldap_service], Package['ruby-ldap']];
-          
+
             'ldapadd-ppolicies-entity':
-	            rootdn      => "${rootdn},${basedn}",
-	            rootpw      => $rootldappw,
-	            ldif_search => "cn=default,ou=policies,${basedn}",
-	            ldif        => template("shib2idp/ppolicy_entity.ldif.erb"),
-	            require     => [Execute_ldap['ldapadd-ppolicies-ou'], Package['ruby-ldap'], File['/usr/lib/ldap/check_password.so']];
-	      }
+                    rootdn      => "${rootdn},${basedn}",
+                    rootpw      => $rootldappw,
+                    ldif_search => "cn=default,ou=policies,${basedn}",
+                    ldif        => template("shib2idp/ppolicy_entity.ldif.erb"),
+                    require     => [Execute_ldap['ldapadd-ppolicies-ou'], Package['ruby-ldap'], File['/usr/lib/ldap/check_password.so']];
+              }
       }
     }
 
@@ -272,8 +230,8 @@ class shib2idp::idp::finalize (
     $ldap_use_tls_var   = $ldap_use_tls
     $ldap_use_plain_var = ($ldap_use_ssl_var == false and $ldap_use_tls_var == false)
   } # if - else
-  
-  
+
+
 
   if ($ldap_use_ssl) {
     exec { 'get-ldapcertificate':
@@ -293,7 +251,7 @@ class shib2idp::idp::finalize (
       mode    => '0664',
       content => template("shib2idp/ldap.properties.erb"),
       require => Shibboleth_install['execute_install'];
-      
+
     '/opt/shibboleth-idp/conf/authn/jaas.config':
       ensure  => present,
       owner   => $curtomcat,
@@ -301,7 +259,7 @@ class shib2idp::idp::finalize (
       mode    => '0664',
       content => template("shib2idp/jaas.config.erb"),
       require => Shibboleth_install['execute_install'];
-      
+
     '/opt/shibboleth-idp/conf/authn/password-authn-config.xml':
       ensure  => present,
       owner   => $curtomcat,
@@ -323,7 +281,7 @@ class shib2idp::idp::finalize (
       target  => '/usr/share/java/mysql-connector-java.jar',
       require => Class['tomcat', 'mysql::bindings::java'];
   }
-  
+
   download_file { "/var/lib/${curtomcat}/common/jstl-1.2.jar":
     url             => "https://build.shibboleth.net/nexus/service/local/repositories/thirdparty/content/javax/servlet/jstl/1.2/jstl-1.2.jar",
     require => Class['tomcat', 'mysql::bindings::java'],
@@ -364,7 +322,7 @@ class shib2idp::idp::finalize (
   }
 
   else{
-  
+
     mysql_database { ['userdb', 'storageservice']:
       ensure  => 'present',
       require => Class['mysql::server'],
@@ -393,7 +351,7 @@ class shib2idp::idp::finalize (
          require           => [Package['ruby-mysql'], MySql_Database['userdb']];
     }
   }
-  
+
   $scope = $domain_name
   include "shib2idp::idp::attributes"
   if ($install_ldap) {
@@ -431,7 +389,7 @@ class shib2idp::idp::finalize (
       mode    => '0664',
       source  => "puppet:///modules/shib2idp/attribute-filter.xml",
       require => Shibboleth_install['execute_install'];
-  
+
     "/opt/shibboleth-idp/conf/services.xml":
       ensure  => present,
       owner   => $curtomcat,
@@ -439,7 +397,7 @@ class shib2idp::idp::finalize (
       mode    => '0664',
       content => template("shib2idp/services.xml.erb"),
       require => Shibboleth_install['execute_install'];
-  
+
     "/opt/shibboleth-idp/conf/metadata-providers.xml":
       ensure  => present,
       owner   => $curtomcat,
@@ -447,7 +405,7 @@ class shib2idp::idp::finalize (
       mode    => '0664',
       content => template('shib2idp/metadata-providers.xml.erb'),
       require => Shibboleth_install['execute_install'];
-      
+
     "/opt/shibboleth-idp/conf/global.xml":
       ensure  => present,
       owner   => $curtomcat,
@@ -455,7 +413,7 @@ class shib2idp::idp::finalize (
       mode    => '0664',
       content => template('shib2idp/global.xml.erb'),
       require => Shibboleth_install['execute_install'];
-      
+
     "/opt/shibboleth-idp/conf/authn/general-authn.xml":
       ensure  => present,
       owner   => $curtomcat,
@@ -487,7 +445,7 @@ class shib2idp::idp::finalize (
     require => Shibboleth_install['execute_install'];
   }
 
-  
+
   #@@file { "/etc/shibboleth/${hostname}-metadata.xml":
   #  content => $::idpmetadata,
   #  tag => "${hostname}-metadata",
