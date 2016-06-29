@@ -86,6 +86,7 @@ $IDP_CERTIFICATE_ENCRYPT
         <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://<%=@idpfqdn%>/idp/profile/SAML2/SOAP/SLO"/>
         -->
 
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
         <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
 
         <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://<%=@idpfqdn%>/idp/profile/SAML2/POST/SSO"/>
@@ -133,6 +134,9 @@ $IDP_CERTIFICATE_ENCRYPT
         </KeyDescriptor>
 
         <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://<%=@idpfqdn%>/idp/profile/SAML2/SOAP/AttributeQuery"/>
+
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
 
     </AttributeAuthorityDescriptor>
 

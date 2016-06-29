@@ -1,4 +1,7 @@
 Insert here your
  
-- $hostname-metadata.crt 
-- $hostname-metadata.key
+- $hostname-encryption-metadata.crt 
+- $hostname-encryption-metadata.key
+- $hostname-signing-metadata.crt 
+- $hostname-signing-metadata.key
+- $hostname-backchannel-metadata.crt 

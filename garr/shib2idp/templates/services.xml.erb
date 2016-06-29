@@ -84,6 +84,7 @@
               
         In all cases you should review the "idp.httpclient.*" properties defined in services.properties
     -->
+<% if @test_federation_var!=true -%>
         <bean id="ResearchAndScholarship" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
               c:client-ref="shibboleth.FileCachingHttpClient" 
               c:url="http://www.garr.it/idem-conf/attribute-filter-v3-rs.xml"
@@ -94,11 +95,11 @@
               c:url="http://www.garr.it/idem-conf/attribute-filter-v3-coco.xml"
               c:backingFile="%{idp.home}/conf/attribute-filter-v3-coco.xml"/>
 
-          <bean id="idem-resources" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
+          <bean id="idem-idp-in-the-cloud" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
               c:client-ref="shibboleth.FileCachingHttpClient" 
-              c:url="http://www.garr.it/idem-conf/attribute-filter-v3-required.xml"
-              c:backingFile="%{idp.home}/conf/attribute-filter-v3-required.xml"/>
- 
+              c:url="http://www.garr.it/idem-conf/attribute-filter-v3-idp-in-the-cloud.xml"
+              c:backingFile="%{idp.home}/conf/attribute-filter-v3-idp-in-the-cloud.xml"/>
+<% end -%>
     <!--
     Otherwise by default we look at resources whose names are derived from %{idp.home}. Services not configured
     using native Spring syntax also need to load the property-placeholder file in order to pull settings from
@@ -130,14 +131,14 @@
 
     <util:list id ="shibboleth.AttributeFilterResources">
         <value>%{idp.home}/conf/attribute-filter.xml</value>
-        <ref bean="idem-resources"/> 
+<% if @test_federation_var!=true -%>
+        <ref bean="idem-idp-in-the-cloud"/>
 <% if @ec_rs=true -%>
         <ref bean="ResearchAndScholarship"/> 
 <% end -%>
 <% if @ec_coco=true -%>
         <ref bean="CodeOfConduct"/>
 <% end -%>
-<% if @test_federation_var!=true -%>
         <value>http://www.garr.it/idem-conf/attribute-filter.xml</value>
 <% end -%>
     </util:list>

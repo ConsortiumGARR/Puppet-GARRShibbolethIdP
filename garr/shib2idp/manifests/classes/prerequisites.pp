@@ -19,7 +19,7 @@
 # This class file is not called directly.
 class shib2idp::prerequisites (
   $rootpw     = 'idppuppetsecret',
-  $idpfqdn    = 'idp.example.org', 
+  $idpfqdn    = 'idp.example.org',
   $mailto     = '',
 ) {
 
@@ -30,29 +30,25 @@ class shib2idp::prerequisites (
   $java_opts = $shib2common::java::params::java_opts
 
   if rubyversion == '1.8.7'{
-     package { ['libldap-ruby1.8', 'gettext', 'python-ldap']: 
+     package { ['libldap-ruby1.8', 'gettext', 'python-ldap']:
         ensure => installed,
      }
   }
   # Else Ruby > 1.8 (1.9.3)
   else {
-     package { 'libldap-ruby1.8': 
+     package { 'libldap-ruby1.8':
         ensure => purged,
      }
 
-     package { ['ruby-ldap', 'gettext', 'python-ldap']: 
+     package { ['ruby-ldap', 'gettext', 'python-ldap']:
         ensure => installed,
      }
-  }
-
-  package { 'libxerces2-java':
-    ensure => installed,
   }
 
   include 'concat::setup'
 
   apache::mod { 'actions': }
-  
+
   file {
     "/etc/apache2/sites-available/idp.conf":
       ensure  => present,
@@ -79,11 +75,11 @@ class shib2idp::prerequisites (
       require => File["/etc/apache2/sites-available/idp.conf"],
       notify => Service ['httpd'];
   }
-  
+
   $proxy_pass_idp = [
      { 'path' => '/idp', 'url' => 'ajp://localhost:8009/idp' },
   ]
-  
+
   apache::vhost { 'idp-ssl-8443':
     servername        => "${idpfqdn}:8443",
     port              => '8443',
@@ -147,7 +143,7 @@ class shib2idp::prerequisites (
   # Install the mysql-java-connector
   class { 'mysql::bindings':
     java_enable => true,
-    require     => Class['mysql::server', 'shib2common::java::package']
+    require     => Class['mysql::server', 'shib2common::java::package'],
+    notify      => Exec['mysql-connector-into-shibboleth']
   }
 }
-

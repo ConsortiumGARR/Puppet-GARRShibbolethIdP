@@ -18,6 +18,9 @@
 # +ldap_use_tls+:: This parameter must contain true of the LDAP connection must use TLS (may be left undef if install_ldap is set to true).
 # +idpfqdn+:: This parameter must contain the fully qualified domain name of the IdP. This name must be the exact name used by client users to access the machine over the Internet. This FQDN, in fact, will be used to determine the CN of the certificate used for HTTPS. If the name is not identical with the server name specified by the client, the client's browser will raise a security exception.
 # +test_federation+:: = This parameter must contain 'true' to retrieve the test federation's metadata.
+# +ec_coco+:: = This parameter permits to specify if the IdP will support the DP CoCo Entity Category or not
+# +ec_rs+:: = This parameter permits to specify if the IdP will support the R&S Entity Category or not
+# +restore+:: = This parameter permits to specify if the IdP will be restored or not.
 #
 # Actions:
 #
@@ -28,21 +31,21 @@
 #
 class shib2idp::idp::finalize (
   $metadata_information,
-  $install_ldap = true,
-  $domain_name  = 'example.com',
-  $basedn       = 'dc=example,dc=com',
-  $rootdn       = 'cn=admin',
-  $rootpw       = 'ldappassword',
-  $rootldappw   = 'ldappassword',
-  $ldap_host    = undef,
-  $ldap_use_ssl = undef,
-  $ldap_use_tls = undef,
-  $nagiosserver = undef,
-  $idpfqdn      = 'idp.example.org',
+  $install_ldap    = true,
+  $domain_name     = 'example.com',
+  $basedn          = 'dc=example,dc=com',
+  $rootdn          = 'cn=admin',
+  $rootpw          = 'ldappassword',
+  $rootldappw      = 'ldappassword',
+  $ldap_host       = undef,
+  $ldap_use_ssl    = undef,
+  $ldap_use_tls    = undef,
+  $nagiosserver    = undef,
+  $idpfqdn         = 'idp.example.org',
   $test_federation = true,
-  $restore      = false,
-  $ec_rs        = true,
-  $ec_coco      = true,
+  $ec_rs           = true,
+  $ec_coco         = true,
+  $restore         = false,
 ) {
 
   $test_federation_var = $test_federation
@@ -57,7 +60,7 @@ class shib2idp::idp::finalize (
     'idp_log_2':
       ensure => present,
       path   => '/etc/environment',
-      line   => "TOMCAT_LOG_DIR=/var/log/${curtomcat}/";
+      line   => "TOMCAT_LOG_DIR=/var/log/${curtomcat}/"
   }
 
   if ($install_ldap) {
@@ -231,8 +234,6 @@ class shib2idp::idp::finalize (
     $ldap_use_plain_var = ($ldap_use_ssl_var == false and $ldap_use_tls_var == false)
   } # if - else
 
-
-
   if ($ldap_use_ssl) {
     exec { 'get-ldapcertificate':
       command => "echo -n | openssl s_client -connect ${ldap_host}:636 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ldap-server.crt",
@@ -351,6 +352,29 @@ class shib2idp::idp::finalize (
          require           => [Package['ruby-mysql'], MySql_Database['userdb']];
     }
   }
+
+# Replace the above code after the migration to the correct table.
+#    execute_mysql {
+#      'userdb-table-shibpid':
+#         user              => 'root',
+#         password          => $rootpw,
+#         dbname            => 'userdb',
+#         query_check_empty => 'SHOW TABLES LIKE "shibpid"',
+#         sql               => [join(['CREATE TABLE shibpid (',
+#                                     'localEntity VARCHAR(255) NOT NULL,',
+#                                     'peerEntity VARCHAR(255) NOT NULL,',
+#                                     'principalName VARCHAR(255) NOT NULL DEFAULT \'\',',
+#                                     'localId VARCHAR(255) NOT NULL,',
+#                                     'persistentId VARCHAR(255) NOT NULL,',
+#                                     'peerProvidedId VARCHAR(255) DEFAULT NULL,',
+#                                     'creationDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,',
+#                                     'deactivationDate TIMESTAMP NULL DEFAULT NULL,',
+#                                     'PRIMARY KEY (localEntity, peerEntity, persistentId)',
+#                                     ')'], ' ')],
+#         require           => [Package['ruby-mysql'], MySql_Database['userdb']];
+#    }
+#  }
+
 
   $scope = $domain_name
   include "shib2idp::idp::attributes"

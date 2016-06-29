@@ -32,7 +32,9 @@
 # +ldap_use_tls+:: This parameter must contain true of the LDAP connection must use TLS (may be left undef if install_ldap is set to true).
 # +nagiosserver+:: This parameter permits to specify a Nagios server, if it contains a value different from 'undef' NRPE daemon will be installed and configured to accept connections from the specified Nagios server.
 # +custom_styles+:: This parameter permits to decide if install the default IdP style or the custom one.
-# +additional_metadata+:: undef,
+# +ec_coco+:: = This parameter permits to specify if the IdP will support the DP CoCo Entity Category or not
+# +ec_rs+:: = This parameter permits to specify if the IdP will support the R&S Entity Category or not
+# +restore+:: = This parameter permits to specify if the IdP will be restored or not.
 #
 # Actions:
 #
@@ -43,7 +45,7 @@
 #
 class shib2idp::idp (
   $metadata_information,
-  $shibbolethversion = '3.1.1',
+  $shibbolethversion = '3.2.1',
   $idpfqdn           = undef,
   $keystorepassword  = 'secret',
   $mailto            = undef,
@@ -59,9 +61,9 @@ class shib2idp::idp (
   $nagiosserver      = undef,
   $test_federation   = undef,
   $custom_styles     = undef,
-  $restore           = undef,
   $ec_rs             = true,
   $ec_coco           = true,
+  $restore           = undef,
 ) {
   $curtomcat = $::tomcat::curtomcat
 
@@ -100,11 +102,11 @@ class shib2idp::idp (
     '/usr/local/src/shibboleth-identity-provider/webapp/META-INF/classes':
       ensure  => directory,
       require => Download_file["/usr/local/src/shibboleth-identity-provider-${shibbolethversion}"];
-      
+
     '/usr/local/src/shibboleth-identity-provider/webapp/META-INF/classes/META-INF':
       ensure  => directory,
       require => File['/usr/local/src/shibboleth-identity-provider/webapp/META-INF/classes'];
-      
+
     '/usr/local/src/shibboleth-identity-provider/webapp/META-INF/classes/META-INF/ord.xml':
       ensure  => present,
       owner   => 'root',
@@ -112,7 +114,7 @@ class shib2idp::idp (
       mode    => '0644',
       source  => "puppet:///modules/shib2idp/ord.xml",
       require => File['/usr/local/src/shibboleth-identity-provider/webapp/META-INF/classes/META-INF'];
-      
+
     '/usr/local/src/shibboleth-identity-provider/webapp/WEB-INF/lib/HikariCP-java6-2.3.6.jar':
       ensure  => present,
       owner   => 'root',
@@ -120,7 +122,7 @@ class shib2idp::idp (
       mode    => '0644',
       source  => "puppet:///modules/shib2idp/jars/HikariCP-java6-2.3.6.jar",
       require => Download_file["/usr/local/src/shibboleth-identity-provider-${shibbolethversion}"];
-      
+
     "/var/lib/${curtomcat}/common/jstl-1.2.jar":
       ensure  => present,
       owner   => 'root',
@@ -145,6 +147,36 @@ class shib2idp::idp (
       source  => "puppet:///modules/shib2idp/jars/ecj-3.7.1.jar",
       require => Class['shib2common::java::package', 'tomcat'];
 
+    "/usr/share/${curtomcat}/common":
+      ensure => directory,
+      notify => Service["${curtomcat}"],
+      require => Class['tomcat'];
+
+    "/usr/share/${curtomcat}/common/classes":
+      ensure => directory,
+      notify => Service["${curtomcat}"],
+      require => [Class['tomcat'],File["/usr/share/${curtomcat}/common"]];
+
+    "/usr/share/${curtomcat}/server":
+      ensure => directory,
+      notify => Service["${curtomcat}"],
+      require => Class['tomcat'];
+
+    "/usr/share/${curtomcat}/server/classes":
+      ensure => directory,
+      notify => Service["${curtomcat}"],
+      require => [Class['tomcat'],File["/usr/share/${curtomcat}/server"]];
+
+    "/usr/share/${curtomcat}/shared":
+      ensure => directory,
+      notify => Service["${curtomcat}"],
+      require => Class['tomcat'];
+
+    "/usr/share/${curtomcat}/shared/classes":
+      ensure => directory,
+      notify => Service["${curtomcat}"],
+      require => [Class['tomcat'],File["/usr/share/${curtomcat}/shared"]];
+
     ["/usr/share/${curtomcat}/lib/ecj.jar", "/usr/share/${curtomcat}/lib/eclipse-ecj.jar"]:
       ensure  => link,
       target  => "/usr/share/${curtomcat}/lib/ecj-3.7.1.jar",
@@ -156,15 +188,6 @@ class shib2idp::idp (
       group   => 'root',
       mode    => '0644',
       source  => "puppet:///modules/shib2idp/web.xml",
-      require => Class['shib2common::java::package', 'tomcat'];
-   
-    ["/var/lib/${curtomcat}/common/xercesImpl-2.11.0.jar"]:
-      ensure  => link,
-      target  => "/usr/share/java/xercesImpl-2.11.0.jar",
-      require => [Package['libxerces2-java'], Class['shib2common::java::package', 'tomcat']];
-
-    ['/usr/share/java/ecj.jar', '/usr/share/java/eclipse-ecj.jar', "/usr/share/${curtomcat}/lib/servlet-api.jar"]:
-      ensure  => absent,
       require => Class['shib2common::java::package', 'tomcat'];
   }
 
@@ -178,35 +201,63 @@ class shib2idp::idp (
     metadata_information => $metadata_information,
     require => File['/opt/shibboleth-idp/'],
   }
-  
+
   # Copy certs for metadata (if present)
-  if file_exists("puppet:///modules/shib2idp/certs/${hostname}-metadata.crt") == 1 {
+  if ( file_exists("puppet:///modules/shib2idp/certs/${hostname}-encryption-metadata.crt") == 1 ) and
+     ( file_exists("puppet:///modules/shib2idp/certs/${hostname}-encryption-metadata.key") == 1 ) and
+     ( file_exists("puppet:///modules/shib2idp/certs/${hostname}-signing-metadata.crt") == 1 ) and
+     ( file_exists("puppet:///modules/shib2idp/certs/${hostname}-signing-metadata.key") == 1 ) and
+     ( file_exists("puppet:///modules/shib2idp/certs/${hostname}-backchannel-metadata.crt") == 1 ) {
     File['/opt/shibboleth-idp/credentials/idp-encryption.crt', '/opt/shibboleth-idp/credentials/idp-signing.crt'] -> Idp_metadata['/opt/shibboleth-idp/metadata/idp-metadata.xml']
     File['/opt/shibboleth-idp/credentials/idp-encryption.key', '/opt/shibboleth-idp/credentials/idp-signing.key'] -> Idp_metadata['/opt/shibboleth-idp/metadata/idp-metadata.xml']
-    
+
     file {
       '/opt/shibboleth-idp/credentials':
         ensure  => directory,
         require => File['/opt/shibboleth-idp'];
 
-      ['/opt/shibboleth-idp/credentials/idp-encryption.crt', '/opt/shibboleth-idp/credentials/idp-signing.crt', '/opt/shibboleth-idp/credentials/idp-backchannel.crt']:
+      '/opt/shibboleth-idp/credentials/idp-encryption.crt':
         ensure  => present,
         owner   => $curtomcat,
         group   => $curtomcat,
         mode    => '0644',
-        source  => "puppet:///modules/shib2idp/certs/${hostname}-metadata.crt",
+        source  => "puppet:///modules/shib2idp/certs/${hostname}-encryption-metadata.crt",
         require => [File['/opt/shibboleth-idp/credentials'], Shibboleth_install['execute_install']];
-        
-      ['/opt/shibboleth-idp/credentials/idp-encryption.key', '/opt/shibboleth-idp/credentials/idp-signing.key']:
+
+      '/opt/shibboleth-idp/credentials/idp-signing.crt':
+        ensure  => present,
+        owner   => $curtomcat,
+        group   => $curtomcat,
+        mode    => '0644',
+        source  => "puppet:///modules/shib2idp/certs/${hostname}-signing-metadata.crt",
+        require => [File['/opt/shibboleth-idp/credentials'], Shibboleth_install['execute_install']];
+
+      '/opt/shibboleth-idp/credentials/idp-backchannel.crt':
+        ensure  => present,
+        owner   => $curtomcat,
+        group   => $curtomcat,
+        mode    => '0644',
+        source  => "puppet:///modules/shib2idp/certs/${hostname}-backchannel-metadata.crt",
+        require => [File['/opt/shibboleth-idp/credentials'], Shibboleth_install['execute_install']];
+
+      '/opt/shibboleth-idp/credentials/idp-signing.key':
         ensure  => present,
         owner   => $curtomcat,
         group   => $curtomcat,
         mode    => '0600',
-        source  => "puppet:///modules/shib2idp/certs/${hostname}-metadata.key",
+        source  => "puppet:///modules/shib2idp/certs/${hostname}-signing-metadata.key",
+        require => [File['/opt/shibboleth-idp/credentials'], Shibboleth_install['execute_install']];
+
+      '/opt/shibboleth-idp/credentials/idp-encryption.key':
+        ensure  => present,
+        owner   => $curtomcat,
+        group   => $curtomcat,
+        mode    => '0600',
+        source  => "puppet:///modules/shib2idp/certs/${hostname}-encryption-metadata.key",
         require => [File['/opt/shibboleth-idp/credentials'], Shibboleth_install['execute_install']],
         notify  => Exec['generate-backchannel-p12'],
     }
-    
+
     exec { 'generate-backchannel-p12':
       command     => 'openssl pkcs12 -export -in idp-encryption.crt -inkey idp-encryption.key -out idp-backchannel.p12 -password pass:',
       cwd         => '/opt/shibboleth-idp/credentials',
@@ -214,6 +265,14 @@ class shib2idp::idp (
       require     => Shibboleth_install['execute_install'],
       refreshonly => true,
     }
+  }
+
+  exec { 
+   'mysql-connector-into-shibboleth':
+      command     => 'cp /usr/share/java/mysql-connector-java.jar /usr/local/src/shibboleth-identity-provider/webapp/WEB-INF/lib',
+      path        => ['/bin'],
+      require     => File['/usr/local/src/shibboleth-identity-provider/webapp/WEB-INF/lib/garr-ldaptive.jar'],
+      refreshonly => true
   }
 
   # Install the Shibboleth IdP
@@ -229,7 +288,7 @@ class shib2idp::idp (
     idpscope         => $domain_name,
     require          => Class['shib2common::java::package', 'tomcat'],
   }
-  
+
   augeas { 'idp.properties':
     context => "/files/opt/shibboleth-idp/conf/idp.properties",
     changes => [
@@ -237,7 +296,6 @@ class shib2idp::idp (
       "set idp.sealer.keyPassword ${keystorepassword}",
       "set idp.consent.StorageService shibboleth.JPAStorageService",
       "set idp.ui.fallbackLanguages it,en,fr,es,de",
-      "set idp.xml.securityManager org.apache.xerces.util.SecurityManager",
       "set idp.scope ${domain_name}"],
     onlyif  => "get idp.sealer.storePassword != '${keystorepassword}'",
     require => Shibboleth_install['execute_install'],
@@ -277,3 +335,4 @@ class shib2idp::idp (
   }
 
 }
+

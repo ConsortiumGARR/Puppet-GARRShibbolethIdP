@@ -18,7 +18,7 @@
 # This class file is not called directly.
 #
 class shib2idp::idp::configure (
-  $idpfqdn          = undef, 
+  $idpfqdn          = undef,
   $keystorepassword = undef,
 ) {
   # Verify that /etc/environment has the correct lines
@@ -29,18 +29,12 @@ class shib2idp::idp::configure (
     'idp_environment_rule_1':
       ensure => present,
       path   => '/etc/environment',
-      line   => "JAVA_ENDORSED_DIRS=/usr/share/${curtomcat}/endorsed";
+      line   => "IDP_HOME=${idp_home}";
 
     'idp_environment_rule_2':
       ensure => present,
       path   => '/etc/environment',
-      line   => "IDP_HOME=${idp_home}";
-
-    'idp_environment_rule_3':
-      ensure => present,
-      path   => '/etc/environment',
       line   => "OPENSSL_ia32cap=~0x200000200000000";
- 
   }
 
   file { "/etc/${curtomcat}/Catalina/localhost/idp.xml":
@@ -55,7 +49,7 @@ class shib2idp::idp::configure (
   # Configure Shibboleth IdP
 #  if ($curtomcat == "tomcat6"){
 
-#      download_file { "${tomcat::tomcat_home}/lib/tomcat6-dta-ssl-1.0.0.jar": 
+#      download_file { "${tomcat::tomcat_home}/lib/tomcat6-dta-ssl-1.0.0.jar":
 #         url     => 'https://build.shibboleth.net/nexus/content/repositories/releases/edu/internet2/middleware/security/tomcat6/tomcat6-dta-ssl/1.0.0/tomcat6-dta-ssl-1.0.0.jar',
 #         require => Class['tomcat'],
 #      }
@@ -63,7 +57,7 @@ class shib2idp::idp::configure (
 #  }
 #  elsif($curtomcat == "tomcat7"){
 
-#      download_file { "${tomcat::tomcat_home}/lib/tomcat7-dta-ssl-1.1.jar": 
+#      download_file { "${tomcat::tomcat_home}/lib/tomcat7-dta-ssl-1.1.jar":
 #         url     => 'https://github.com/Unicon/shibboleth-tomcat-dta-ssl/releases/download/v1.1/tomcat7-1.1.jar',
 #         require => Class['tomcat'],
 #      }
@@ -80,7 +74,7 @@ class shib2idp::idp::configure (
       ],
       onlyif  => "get Connector/#attribute/port[../port = '8009'] == ''",
       require => Class['tomcat'];
-      
+
     "server.xml_connector_8080":
       context => "/files/etc/${curtomcat}/server.xml/Server/Service[#attribute/name = 'Catalina']",
       changes => [
@@ -115,23 +109,6 @@ class shib2idp::idp::configure (
       changes => [
         "set JAVA_OPTS '${shib2idp::prerequisites::java_opts}'",],
       onlyif  => "get JAVA_OPTS != '${shib2idp::prerequisites::java_opts}'",
-      notify  => Service[$curtomcat],
-      require => Class['tomcat'];
-      
-    "tomcat_endorsed":
-      context => "/files/etc/default/${curtomcat}",
-      changes => [
-        "set JAVA_ENDORSED_DIRS '/usr/share/${curtomcat}/endorsed'",],
-      onlyif  => "get JAVA_ENDORSED_DIRS != '/usr/share/${curtomcat}/endorsed'",
-      notify  => Service[$curtomcat],
-      require => Class['tomcat'];
-      
-    "catalinaproperties_endorsed":
-      context => "/files/etc/${curtomcat}/catalina.properties",
-      changes => [
-        "set common.loader '\${catalina.base}/lib,\${catalina.base}/lib/*.jar,\${catalina.home}/lib,\${catalina.home}/lib/*.jar,/var/lib/${curtomcat}/common/classes,/var/lib/${curtomcat}/common/*.jar,/usr/share/${curtomcat}/endorsed/*.jar'",
-      ],
-      onlyif  => "get common.loader != '\${catalina.base}/lib,\${catalina.base}/lib/*.jar,\${catalina.home}/lib,\${catalina.home}/lib/*.jar,/var/lib/${curtomcat}/common/classes,/var/lib/${curtomcat}/common/*.jar,/usr/share/${curtomcat}/endorsed/*.jar'",
       notify  => Service[$curtomcat],
       require => Class['tomcat'];
   }
