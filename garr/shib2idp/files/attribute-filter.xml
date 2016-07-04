@@ -5,12 +5,12 @@
 
 <AttributeFilterPolicyGroup id="ShibbolethFilterPolicy"
                             xmlns="urn:mace:shibboleth:2.0:afp"
-                            xmlns:saml="urn:mace:shibboleth:2.0:afp:mf:saml"
+                            xmlns:saml="urn:mace:shibboleth:2.0:mf:saml"
                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                             xmlns:afp="urn:mace:shibboleth:2.0:afp"
                             xsi:schemaLocation="urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd
-                                                urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd
-                                                urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd">
+                                                urn:mace:shibboleth:2.0:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd
+                                                urn:mace:shibboleth:2.0:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd">
     
     <!--  Release the transient ID to anyone -->
     <AttributeFilterPolicy id="releaseTransientIdToAnyone">
@@ -37,80 +37,80 @@
     <AttributeFilterPolicy id="IDEMsp24-test">
         <PolicyRequirementRule xsi:type="Requester" value="https://sp24-test.garr.it/shibboleth" />
         
-        <AttributeRule attributeID="uid"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="surname"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="givenName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="commonName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="displayName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacDateOfBirth"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacYearOfBirth"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPlaceOfBirth"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPersonalUniqueID"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPersonalPosition"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPersonalTitle"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacUserPresenceID"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacHomeOrganization"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacHomeOrganizationType"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacMotherTongue"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="street"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="houseIdentifier"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="locality"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="preferredLanguage"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="postalCode"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="stateProvince"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="countryName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="friendlyCountryName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="email"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="telephoneNumber"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="facsimileTelephoneNumber"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="mobile"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="organizationalUnit"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="organizationName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonOrgDN"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonOrgUnitDN"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonPrincipalName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonEntitlement"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="title"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="uid"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="surname"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="givenName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="commonName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="displayName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacDateOfBirth"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacYearOfBirth"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPlaceOfBirth"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPersonalUniqueID"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPersonalPosition"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPersonalTitle"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacUserPresenceID"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacHomeOrganization"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacHomeOrganizationType"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacMotherTongue"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="street"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="houseIdentifier"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="locality"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="preferredLanguage"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="postalCode"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="stateProvince"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="countryName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="friendlyCountryName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="email"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="telephoneNumber"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="facsimileTelephoneNumber"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="mobile"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="organizationalUnit"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="organizationName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonOrgDN"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonOrgUnitDN"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonPrincipalName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonEntitlement"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="title"><PermitValueRule xsi:type="ANY"/></AttributeRule>
      </AttributeFilterPolicy>
 
     <!-- IDEM SP di Test -->
     <AttributeFilterPolicy id="IDEMsp-test">
         <PolicyRequirementRule xsi:type="Requester" value="https://sp-test.garr.it/shibboleth" />
 
-        <AttributeRule attributeID="uid"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="surname"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="givenName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="commonName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="displayName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacDateOfBirth"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacYearOfBirth"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPlaceOfBirth"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPersonalUniqueID"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPersonalPosition"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacPersonalTitle"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacUserPresenceID"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacHomeOrganization"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacHomeOrganizationType"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="schacMotherTongue"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="street"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="houseIdentifier"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="locality"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="preferredLanguage"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="postalCode"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="stateProvince"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="countryName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="friendlyCountryName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="email"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="telephoneNumber"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="facsimileTelephoneNumber"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="mobile"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="organizationalUnit"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="organizationName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonOrgDN"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonOrgUnitDN"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonPrincipalName"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="eduPersonEntitlement"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
-        <AttributeRule attributeID="title"><afp:PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="uid"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="surname"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="givenName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="commonName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="displayName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacDateOfBirth"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacYearOfBirth"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPlaceOfBirth"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPersonalUniqueID"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPersonalPosition"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacPersonalTitle"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacUserPresenceID"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacHomeOrganization"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacHomeOrganizationType"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="schacMotherTongue"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="street"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="houseIdentifier"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="locality"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="preferredLanguage"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="postalCode"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="stateProvince"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="countryName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="friendlyCountryName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="email"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="telephoneNumber"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="facsimileTelephoneNumber"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="mobile"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="organizationalUnit"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="organizationName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonOrgDN"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonOrgUnitDN"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonPrincipalName"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="eduPersonEntitlement"><PermitValueRule xsi:type="ANY"/></AttributeRule>
+        <AttributeRule attributeID="title"><PermitValueRule xsi:type="ANY"/></AttributeRule>
     </AttributeFilterPolicy>
 
     <!-- IDEM Entity Registry -->

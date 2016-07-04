@@ -85,20 +85,22 @@
         In all cases you should review the "idp.httpclient.*" properties defined in services.properties
     -->
 <% if @test_federation_var!=true -%>
+        <bean id="idem-idp-in-the-cloud" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
+              c:client-ref="shibboleth.FileCachingHttpClient" 
+              c:url="http://www.garr.it/idem-conf/attribute-filter-v3-idp-in-the-cloud.xml"
+              c:backingFile="%{idp.home}/conf/attribute-filter-v3-idp-in-the-cloud.xml"/>
+<% if @ec_rs!=false -%>
         <bean id="ResearchAndScholarship" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
               c:client-ref="shibboleth.FileCachingHttpClient" 
               c:url="http://www.garr.it/idem-conf/attribute-filter-v3-rs.xml"
               c:backingFile="%{idp.home}/conf/attribute-filter-v3-rs.xml"/>
-
+<% end -%>
+<% if @ec_coco!=false -%>
          <bean id="CodeOfConduct" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
               c:client-ref="shibboleth.FileCachingHttpClient" 
               c:url="http://www.garr.it/idem-conf/attribute-filter-v3-coco.xml"
               c:backingFile="%{idp.home}/conf/attribute-filter-v3-coco.xml"/>
-
-          <bean id="idem-idp-in-the-cloud" class="net.shibboleth.ext.spring.resource.FileBackedHTTPResource"
-              c:client-ref="shibboleth.FileCachingHttpClient" 
-              c:url="http://www.garr.it/idem-conf/attribute-filter-v3-idp-in-the-cloud.xml"
-              c:backingFile="%{idp.home}/conf/attribute-filter-v3-idp-in-the-cloud.xml"/>
+<% end -%>
 <% end -%>
     <!--
     Otherwise by default we look at resources whose names are derived from %{idp.home}. Services not configured
@@ -133,10 +135,10 @@
         <value>%{idp.home}/conf/attribute-filter.xml</value>
 <% if @test_federation_var!=true -%>
         <ref bean="idem-idp-in-the-cloud"/>
-<% if @ec_rs=true -%>
+<% if @ec_rs!=false -%>
         <ref bean="ResearchAndScholarship"/> 
 <% end -%>
-<% if @ec_coco=true -%>
+<% if @ec_coco!=false -%>
         <ref bean="CodeOfConduct"/>
 <% end -%>
         <value>http://www.garr.it/idem-conf/attribute-filter.xml</value>
