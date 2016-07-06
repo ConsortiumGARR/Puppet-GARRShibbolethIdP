@@ -49,8 +49,8 @@ if ($error_message === false) {
 
         if ($return_var != 0) {
                 $error_message = array(
-                        "en" => "The password must be at least 8 characters and must not contain your Name or your Surname.",
-                        "it" => "La password deve essere lunga almeno 8 caratteri e non deve contenere il tuo Nome o il tuo Cognome."
+                        "en" => "The password must be at least 8 characters and must not contain your Name or your Surname or a password already used.",
+                        "it" => "La password deve essere lunga almeno 8 caratteri e non deve contenere il tuo Nome o il tuo Cognome o una password già utilizzata."
                 );
                 //$error_message .= "<br/>";
                 //$error_message .= print_r($output, true);
