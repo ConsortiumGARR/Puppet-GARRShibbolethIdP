@@ -329,31 +329,7 @@ class shib2idp::idp::finalize (
       require => Class['mysql::server'],
     }
 
-    execute_mysql {
-      'userdb-table-shibpid':
-         user              => 'root',
-         password          => $rootpw,
-         dbname            => 'userdb',
-         query_check_empty => 'SHOW TABLES LIKE "shibpid"',
-         sql               => [join(['CREATE TABLE shibpid (',
-                                     'localEntity VARCHAR(255) NOT NULL,',
-                                     'peerEntity VARCHAR(255) NOT NULL,',
-                                     'principalName VARCHAR(255) NOT NULL DEFAULT \'\',',
-                                     'localId VARCHAR(255) NOT NULL,',
-                                     'persistentId VARCHAR(255) NOT NULL,',
-                                     'peerProvidedId VARCHAR(255) DEFAULT NULL,',
-                                     'creationDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,',
-                                     'deactivationDate TIMESTAMP NULL DEFAULT NULL,',
-                                     'KEY persistentId (persistentId),',
-                                     'KEY persistentId_2 (persistentId, deactivationDate),',
-                                     'KEY localEntity (localEntity(16), peerEntity(16), localId),',
-                                     'KEY localEntity_2 (localEntity(16), peerEntity(16), localId, deactivationDate)',
-                                     ')'], ' ')],
-         require           => [Package['ruby-mysql'], MySql_Database['userdb']];
-    }
-  }
-
-# Replace the above code after the migration to the correct table.
+# Backup configuration
 #    execute_mysql {
 #      'userdb-table-shibpid':
 #         user              => 'root',
@@ -369,11 +345,36 @@ class shib2idp::idp::finalize (
 #                                     'peerProvidedId VARCHAR(255) DEFAULT NULL,',
 #                                     'creationDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,',
 #                                     'deactivationDate TIMESTAMP NULL DEFAULT NULL,',
-#                                     'PRIMARY KEY (localEntity, peerEntity, persistentId)',
+#                                     'KEY persistentId (persistentId),',
+#                                     'KEY persistentId_2 (persistentId, deactivationDate),',
+#                                     'KEY localEntity (localEntity(16), peerEntity(16), localId),',
+#                                     'KEY localEntity_2 (localEntity(16), peerEntity(16), localId, deactivationDate)',
 #                                     ')'], ' ')],
 #         require           => [Package['ruby-mysql'], MySql_Database['userdb']];
 #    }
 #  }
+
+# Replace the above code after the migration to the correct table.
+    execute_mysql {
+      'userdb-table-shibpid':
+         user              => 'root',
+         password          => $rootpw,
+         dbname            => 'userdb',
+         query_check_empty => 'SHOW TABLES LIKE "shibpid"',
+         sql               => [join(['CREATE TABLE shibpid (',
+                                     'localEntity VARCHAR(255) NOT NULL,',
+                                     'peerEntity VARCHAR(255) NOT NULL,',
+                                     'principalName VARCHAR(255) NOT NULL DEFAULT \'\',',
+                                     'localId VARCHAR(255) NOT NULL,',
+                                     'persistentId VARCHAR(255) NOT NULL,',
+                                     'peerProvidedId VARCHAR(255) DEFAULT NULL,',
+                                     'creationDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,',
+                                     'deactivationDate TIMESTAMP NULL DEFAULT NULL,',
+                                     'PRIMARY KEY (localEntity, peerEntity, persistentId)',
+                                     ')'], ' ')],
+         require           => [Package['ruby-mysql'], MySql_Database['userdb']];
+    }
+  }
 
 
   $scope = $domain_name
